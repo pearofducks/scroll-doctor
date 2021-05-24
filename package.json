@@ -5,5 +5,9 @@
   "main": "index.js",
   "repository": "https://github.com/pearofducks/scroll-doctor",
   "author": "Dave Honneffer <pearofducks@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "version": "npm publish",
+    "postversion": "git push --follow-tags"
+  }
 }

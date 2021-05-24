@@ -54,7 +54,7 @@ function removeTouchHandlers(el) {
   el.ontouchmove = null
 }
 
-const modifyDocumentListener = (_add) => () => document[add ? 'addEventListener' : 'removeEventListener']('touchmove', preventDefault, { passive: false })
+const modifyDocumentListener = (add) => () => document[add ? 'addEventListener' : 'removeEventListener']('touchmove', preventDefault, { passive: false })
 const setDocumentListener = modifyDocumentListener(true)
 const resetDocumentListener = modifyDocumentListener()
 
