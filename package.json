@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "zero-dependency module to fix scrolling when showing modals on mobile devices",
   "main": "index.js",
+  "type": "module",
   "exports": {
     "require": "./dist/index.cjs",
     "import": "./index.js"
