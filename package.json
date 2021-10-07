@@ -1,6 +1,6 @@
 {
   "name": "scroll-doctor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "zero-dependency module to fix scrolling when showing modals on mobile devices",
   "main": "index.js",
   "type": "module",
