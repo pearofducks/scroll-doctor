@@ -41,7 +41,9 @@ const setBodyStyle = ([k, v]) => {
 }
 const setBodyStyles = () => Object.entries(bodyStyleTargets).forEach(setBodyStyle)
 const resetBodyStyle = k => document.body.style[k] = bodyStyleHistory[k]
-const resetBodyStyles = () => Object.keys(bodyStyleTargets).forEach(resetBodyStyle)
+// bodyStyleHistory is used here to ensure we get any elements
+// that we've added (like paddingRight) that need to be set dynamically
+const resetBodyStyles = () => Object.keys(bodyStyleHistory).forEach(resetBodyStyle)
 
 function handleScrollbarDisappearance() {
   const sbWidth = getScrollbarWidth()
