@@ -3,6 +3,27 @@ let elements = []
 const bodyStyleHistory = {}
 const bodyStyleTargets = Object.freeze({ overflow: 'hidden', position: 'relative', height: '100%' })
 
+function getScrollbarWidth() {
+  // Creating invisible container
+  const outer = document.createElement('div');
+  outer.style.visibility = 'hidden';
+  outer.style.overflow = 'scroll'; // forcing scrollbar to appear
+  outer.style.msOverflowStyle = 'scrollbar'; // needed for WinJS apps
+  document.body.appendChild(outer);
+
+  // Creating inner element and placing it in the container
+  const inner = document.createElement('div');
+  outer.appendChild(inner);
+
+  // Calculating difference between container's full width and the child width
+  const scrollbarWidth = (outer.offsetWidth - inner.offsetWidth);
+
+  // Removing temporary elements from the DOM
+  outer.parentNode.removeChild(outer);
+
+  return scrollbarWidth;
+}
+
 const preventDefault = event => {
   const evt = event || window.event
 
@@ -21,6 +42,11 @@ const setBodyStyle = ([k, v]) => {
 const setBodyStyles = () => Object.entries(bodyStyleTargets).forEach(setBodyStyle)
 const resetBodyStyle = k => document.body.style[k] = bodyStyleHistory[k]
 const resetBodyStyles = () => Object.keys(bodyStyleTargets).forEach(resetBodyStyle)
+
+function handleScrollbarDisappearance() {
+  const sbWidth = getScrollbarWidth()
+  if (sbWidth > 0) setBodyStyle(['paddingRight', `${sbWidth}px`])
+}
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#Problems_and_solutions
 const isElementTotallyScrolled = el => el.scrollHeight - Math.abs(el.scrollTop) === el.clientHeight
@@ -65,6 +91,7 @@ export function setup(el) {
   if (elements.some(e => e === el)) return
 
   if (!elements.length) {
+    handleScrollbarDisappearance()
     setBodyStyles()
     setDocumentListener()
   }
