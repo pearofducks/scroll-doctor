@@ -1,17 +1,13 @@
 let elements = []
 
 const bodyStyleHistory = {}
-const bodyStyleTargets = Object.freeze({ overflow: 'hidden', position: 'relative', height: '100%' })
+const bodyStyleTargets = Object.freeze({ overflow: 'hidden', position: 'relative', height: '100%', 'scrollbar-gutter': 'stable' })
 
-const preventDefault = event => {
-  const evt = event || window.event
-
+/** @param {Event} evt */
+const preventDefault = evt => {
   // Bail if multi-touch, e.g. pinch to zoom.
-  if (evt.touches.length > 1) return true
-
-  if (evt.preventDefault) evt.preventDefault()
-
-  return false
+  if (evt.touches.length > 1) return
+  evt.preventDefault?.()
 }
 
 const setBodyStyle = ([k, v]) => {
@@ -25,6 +21,7 @@ const resetBodyStyles = () => Object.keys(bodyStyleTargets).forEach(resetBodySty
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#Problems_and_solutions
 const isElementTotallyScrolled = el => el.scrollHeight - Math.abs(el.scrollTop) === el.clientHeight
 
+/** @param {HTMLElement} el */
 function addTouchHandlers(el) {
   let initialClientY = -1
 
@@ -58,6 +55,7 @@ const modifyDocumentListener = (add) => () => document[add ? 'addEventListener' 
 const setDocumentListener = modifyDocumentListener(true)
 const resetDocumentListener = modifyDocumentListener()
 
+/** @param {HTMLElement} el */
 export function setup(el) {
   if (!el) throw Error('Could not run setup, an element must be provided')
 

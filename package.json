@@ -4,10 +4,7 @@
   "description": "zero-dependency module to fix scrolling when showing modals on mobile devices",
   "main": "index.js",
   "type": "module",
-  "exports": {
-    "require": "./dist/index.cjs",
-    "import": "./index.js"
-  },
+  "exports": "./index.js",
   "repository": "https://github.com/pearofducks/scroll-doctor",
   "author": "Dave Honneffer <pearofducks@gmail.com>",
   "license": "MIT",
@@ -15,13 +12,12 @@
     "preversion": "npm run build",
     "version": "npm publish",
     "postversion": "git push --follow-tags",
-    "build": "rollup -c"
+    "build": "vite build"
   },
   "devDependencies": {
-    "rollup": "^2.58.0"
+    "vite": "^5.0.12"
   },
   "files": [
-    "index.js",
     "dist"
   ]
 }
