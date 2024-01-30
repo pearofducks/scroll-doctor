@@ -1,30 +1,46 @@
 let elements = []
 
-const bodyStyleHistory = {}
-const bodyStyleTargets = Object.freeze({ overflow: 'hidden', position: 'relative', height: '100%' })
+const styleHistory = { documentElement: {}, body: {} }
+export const styleTargets = Object.freeze({
+  // html
+  documentElement: {
+    overflow: 'auto',
+    height: '100%',
+  },
+  body: {
+    overflow: 'hidden',
+    position: 'relative',
+    height: '100%',
+    'scrollbar-gutter': 'stable',
+  },
+})
 
-const preventDefault = event => {
-  const evt = event || window.event
 
+/** @param {Event} evt */
+const preventDefault = evt => {
   // Bail if multi-touch, e.g. pinch to zoom.
-  if (evt.touches.length > 1) return true
-
-  if (evt.preventDefault) evt.preventDefault()
-
-  return false
+  if (evt.touches.length > 1) return
+  evt.preventDefault?.()
 }
 
-const setBodyStyle = ([k, v]) => {
-  bodyStyleHistory[k] = document.body.style[k]
-  document.body.style[k] = v
+const setStyle = (target) => ([k, v]) => {
+  styleHistory[target][k] = document[target].style[k]
+  document[target].style[k] = v
 }
-const setBodyStyles = () => Object.entries(bodyStyleTargets).forEach(setBodyStyle)
-const resetBodyStyle = k => document.body.style[k] = bodyStyleHistory[k]
-const resetBodyStyles = () => Object.keys(bodyStyleTargets).forEach(resetBodyStyle)
+export const setStyles = () => Object.entries(styleTargets).forEach(([target, styles]) => {
+  Object.entries(styles).forEach(setStyle(target))
+})
+const resetStyle = (target) => ([k, _]) => {
+  document[target].style[k] = styleHistory[target][k]
+}
+export const resetStyles = () => Object.entries(styleHistory).forEach(([target, styles]) => {
+  Object.entries(styles).forEach(resetStyle(target))
+})
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#Problems_and_solutions
 const isElementTotallyScrolled = el => el.scrollHeight - Math.abs(el.scrollTop) === el.clientHeight
 
+/** @param {HTMLElement} el */
 function addTouchHandlers(el) {
   let initialClientY = -1
 
@@ -49,6 +65,7 @@ function addTouchHandlers(el) {
   el.ontouchmove = handleScroll
 }
 
+/** @param {HTMLElement} el */
 function removeTouchHandlers(el) {
   el.ontouchstart = null
   el.ontouchmove = null
@@ -58,6 +75,7 @@ const modifyDocumentListener = (add) => () => document[add ? 'addEventListener' 
 const setDocumentListener = modifyDocumentListener(true)
 const resetDocumentListener = modifyDocumentListener()
 
+/** @param {HTMLElement} el */
 export function setup(el) {
   if (!el) throw Error('Could not run setup, an element must be provided')
 
@@ -65,7 +83,7 @@ export function setup(el) {
   if (elements.some(e => e === el)) return
 
   if (!elements.length) {
-    setBodyStyles()
+    setStyles()
     setDocumentListener()
   }
 
@@ -76,6 +94,6 @@ export function setup(el) {
 export function teardown() {
   elements.forEach(removeTouchHandlers)
   resetDocumentListener()
-  resetBodyStyles()
+  resetStyles()
   elements = []
 }
