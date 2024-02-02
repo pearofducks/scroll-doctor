@@ -4,14 +4,12 @@ const styleHistory = { documentElement: {}, body: {} }
 export const styleTargets = Object.freeze({
   // html
   documentElement: {
-    // overflow: 'auto',
-    // height: '100%',
+    'scrollbar-gutter': 'stable',
   },
   body: {
     overflow: 'hidden',
     position: 'relative',
     height: '100%',
-    // 'scrollbar-gutter': 'stable',
   },
 })
 
