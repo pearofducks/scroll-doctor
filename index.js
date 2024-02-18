@@ -1,3 +1,4 @@
+/** @type {HTMLElement[]} */
 let elements = []
 
 const styleHistory = { documentElement: {}, body: {} }
@@ -14,11 +15,11 @@ export const styleTargets = Object.freeze({
 })
 
 
-/** @param {Event} evt */
+/** @param {TouchEvent} evt */
 const preventDefault = evt => {
   // Bail if multi-touch, e.g. pinch to zoom.
   if (evt.touches.length > 1) return
-  evt.preventDefault?.()
+  evt.preventDefault()
 }
 
 const setStyle = (target) => ([k, v]) => {
